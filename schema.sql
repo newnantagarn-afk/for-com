@@ -1,0 +1,5 @@
+create table users(id uuid primary key default gen_random_uuid(),username text unique not null,password_hash text not null,name text,role text not null check(role in('director','finance','admin')),created_at timestamptz default now());
+create table students(id uuid primary key default gen_random_uuid(),student_no text,name text not null,classroom text,level text,year text,registered boolean default false);
+create table receipts(id uuid primary key default gen_random_uuid(),receipt_no text unique not null,date date not null default current_date,payer text,student_id uuid references students(id) on delete set null,amount numeric default 0,note text,file_url text,locked boolean default false,cancelled boolean default false,created_by text,created_at timestamptz default now());
+create table audit_logs(id uuid primary key default gen_random_uuid(),user_name text,action text,table_name text,record_id text,detail jsonb,created_at timestamptz default now());
+-- สร้าง Storage bucket ชื่อ receipts (Public) ใน Supabase ด้วย
